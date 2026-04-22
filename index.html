@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programa de Ensaio - Coreografias</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #000 0%, #111 100%);
+      color: #fff;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: gold;
+      margin-top: 0;
+    }
+    .subtitle {
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #151515;
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.08);
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #f2d46b;
+      font-weight: bold;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #0d0d0d;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    button {
+      background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+      color: #000;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button.secondary {
+      background: #222;
+      color: gold;
+      border: 1px solid gold;
+    }
+    button.danger {
+      background: #9b111e;
+      color: #fff;
+    }
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .clock {
+      font-size: 22px;
+      font-weight: bold;
+      color: gold;
+    }
+    .dateNow {
+      color: #ddd;
+      font-size: 15px;
+      margin-top: 6px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .stat {
+      background: #0d0d0d;
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .stat .big {
+      font-size: 24px;
+      color: gold;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #3a3a3a;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #1d1d1d;
+      color: gold;
+    }
+    tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+    .pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      background: rgba(255,215,0,0.12);
+      color: gold;
+      border: 1px solid rgba(255,215,0,0.35);
+    }
+    .inline-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .muted { color: #bbb; font-size: 13px; }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .actions button { width: auto; margin-bottom: 0; }
+    .footer-note {
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+      margin-top: 25px;
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      .card, .stat { background: #fff; color: #000; box-shadow: none; }
+      h1, h2, h3, .clock, th, .pill { color: #000 !important; }
+      button { display: none !important; }
+      input, select, textarea { border: 1px solid #999; color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Programa de Ensaio de Coreografias</h1>
+    <div class="subtitle">Cadastro completo por ensaio com nome, idade, horários, tempo total e tempo executado por coreografia após o encerramento.</div>
+
+    <div class="topbar">
+      <div class="card">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="dateNow" id="dateNow">--</div>
+      </div>
+      <div class="card">
+        <h3>Resumo do Sistema</h3>
+        <div class="muted">Os dados ficam salvos no navegador automaticamente.</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="big" id="totalEnsaios">0</div><div>Total de Ensaios</div></div>
+      <div class="stat"><div class="big" id="totalHoras">00:00</div><div>Total de Horas</div></div>
+      <div class="stat"><div class="big" id="totalCoreografias">0</div><div>Coreografias Registradas</div></div>
+      <div class="stat"><div class="big" id="mediaEnsaio">00:00</div><div>Média por Ensaio</div></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Novo Ensaio</h2>
+        <label>Nome</label>
+        <input id="nome" type="text" placeholder="Ex: João" />
+
+        <label>Idade</label>
+        <input id="idade" type="number" min="0" placeholder="Ex: 22" />
+
+        <div class="inline-2">
+          <div>
+            <label>Data do Ensaio</label>
+            <input id="dataEnsaio" type="date" />
+          </div>
+          <div>
+            <label>Horário Oficial do Ensaio</label>
+            <input id="horarioEnsaio" type="time" />
+          </div>
+        </div>
+
+        <div class="inline-2">
+          <div>
+            <label>Hora de Chegada</label>
+            <input id="horaChegada" type="time" />
+          </div>
+          <div>
+            <label>Hora de Saída</label>
+            <input id="horaSaida" type="time" />
+          </div>
+        </div>
+
+        <label>Observações</label>
+        <textarea id="observacoes" placeholder="Ex: ensaio com foco em limpeza, entradas e marcações."></textarea>
+
+        <div class="actions">
+          <button onclick="adicionarEnsaio()">Salvar Ensaio</button>
+          <button class="secondary" onclick="limparFormulario()">Limpar</button>
+          <button class="secondary" onclick="window.print()">Exportar PDF</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Registrar Tempo por Coreografia</h2>
+        <label>Selecione o Ensaio</label>
+        <select id="ensaioSelect"></select>
+
+        <label>Nome da Coreografia</label>
+        <input id="nomeCoreografia" type="text" placeholder="Ex: Billie Jean" />
+
+        <div class="inline-2">
+          <div>
+            <label>Início da Coreografia</label>
+            <input id="inicioCoreo" type="time" />
+          </div>
+          <div>
+            <label>Fim da Coreografia</label>
+            <input id="fimCoreo" type="time" />
+          </div>
+        </div>
+
+        <label>Descrição da Coreografia / Meta</label>
+        <textarea id="descricaoCoreo" placeholder="Ex: corrigir braço, deslocamento e final do refrão."></textarea>
+
+        <div class="actions">
+          <button onclick="adicionarCoreografia()">Adicionar Coreografia</button>
+        </div>
+
+        <div class="muted">O sistema calcula automaticamente quanto tempo foi ensaiado em cada coreografia.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 18px;">
+      <h2>Histórico de Ensaios</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Idade</th>
+            <th>Data</th>
+            <th>Mês</th>
+            <th>Horário do Ensaio</th>
+            <th>Chegada</th>
+            <th>Saída</th>
+            <th>Tempo Total</th>
+            <th>Observações</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaEnsaios"></tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top: 18px;">
+      <h2>Tempo por Coreografia</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Participante</th>
+            <th>Data</th>
+            <th>Coreografia</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Tempo Feito</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCoreografias"></tbody>
+      </table>
+    </div>
+
+    <div class="footer-note">Programa novo de ensaio • estilo funcional • pronto para usar no celular ou computador</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'programa_ensaio_coreografias_v1';
+
+    let db = {
+      ensaios: [],
+      coreografias: []
+    };
+
+    function salvarDB() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      renderAll();
+    }
+
+    function carregarDB() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          db = JSON.parse(raw);
+        } catch (e) {
+          db = { ensaios: [], coreografias: [] };
+        }
+      }
+      renderAll();
+    }
+
+    function agora() {
+      return new Date();
+    }
+
+    function atualizarRelogio() {
+      const d = agora();
+      const hora = d.toLocaleTimeString('pt-BR');
+      const data = d.toLocaleDateString('pt-BR', {
+        weekday: 'long', year: 'numeric', month: 'long', day: '2-digit'
+      });
+      document.getElementById('clock').textContent = hora;
+      document.getElementById('dateNow').textContent = data;
+    }
+
+    function preencherDataHoje() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      document.getElementById('dataEnsaio').value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function minutosEntre(inicio, fim) {
+      if (!inicio || !fim) return 0;
+      const [hi, mi] = inicio.split(':').map(Number);
+      const [hf, mf] = fim.split(':').map(Number);
+      let totalInicio = hi * 60 + mi;
+      let totalFim = hf * 60 + mf;
+      if (totalFim < totalInicio) totalFim += 24 * 60;
+      return totalFim - totalInicio;
+    }
+
+    function formatarMinutos(min) {
+      const h = Math.floor(min / 60);
+      const m = min % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function formatarDataISO(dataISO) {
+      if (!dataISO) return '-';
+      const [y, m, d] = dataISO.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function nomeMes(dataISO) {
+      if (!dataISO) return '-';
+      const [y, m, d] = dataISO.split('-').map(Number);
+      const data = new Date(y, m - 1, d);
+      return data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    }
+
+    function adicionarEnsaio() {
+      const nome = document.getElementById('nome').value.trim();
+      const idade = document.getElementById('idade').value.trim();
+      const dataEnsaio = document.getElementById('dataEnsaio').value;
+      const horarioEnsaio = document.getElementById('horarioEnsaio').value;
+      const horaChegada = document.getElementById('horaChegada').value;
+      const horaSaida = document.getElementById('horaSaida').value;
+      const observacoes = document.getElementById('observacoes').value.trim();
+
+      if (!nome || !idade || !dataEnsaio || !horarioEnsaio || !horaChegada || !horaSaida) {
+        alert('Preencha nome, idade, data, horário de ensaio, chegada e saída.');
+        return;
+      }
+
+      const totalMin = minutosEntre(horaChegada, horaSaida);
+
+      db.ensaios.push({
+        id: Date.now().toString(),
+        nome,
+        idade,
+        dataEnsaio,
+        horarioEnsaio,
+        horaChegada,
+        horaSaida,
+        totalMin,
+        observacoes
+      });
+
+      salvarDB();
+      limparFormulario();
+      preencherDataHoje();
+    }
+
+    function adicionarCoreografia() {
+      const ensaioId = document.getElementById('ensaioSelect').value;
+      const nomeCoreografia = document.getElementById('nomeCoreografia').value.trim();
+      const inicio = document.getElementById('inicioCoreo').value;
+      const fim = document.getElementById('fimCoreo').value;
+      const descricao = document.getElementById('descricaoCoreo').value.trim();
+
+      if (!ensaioId) {
+        alert('Selecione um ensaio.');
+        return;
+      }
+      if (!nomeCoreografia || !inicio || !fim) {
+        alert('Preencha nome da coreografia, início e fim.');
+        return;
+      }
+
+      const ensaio = db.ensaios.find(e => e.id === ensaioId);
+      if (!ensaio) {
+        alert('Ensaio não encontrado.');
+        return;
+      }
+
+      const totalMin = minutosEntre(inicio, fim);
+
+      db.coreografias.push({
+        id: Date.now().toString(),
+        ensaioId,
+        participante: ensaio.nome,
+        dataEnsaio: ensaio.dataEnsaio,
+        nomeCoreografia,
+        inicio,
+        fim,
+        totalMin,
+        descricao
+      });
+
+      salvarDB();
+      document.getElementById('nomeCoreografia').value = '';
+      document.getElementById('inicioCoreo').value = '';
+      document.getElementById('fimCoreo').value = '';
+      document.getElementById('descricaoCoreo').value = '';
+    }
+
+    function limparFormulario() {
+      document.getElementById('nome').value = '';
+      document.getElementById('idade').value = '';
+      document.getElementById('horarioEnsaio').value = '';
+      document.getElementById('horaChegada').value = '';
+      document.getElementById('horaSaida').value = '';
+      document.getElementById('observacoes').value = '';
+    }
+
+    function excluirEnsaio(id) {
+      if (!confirm('Deseja excluir este ensaio e as coreografias ligadas a ele?')) return;
+      db.ensaios = db.ensaios.filter(e => e.id !== id);
+      db.coreografias = db.coreografias.filter(c => c.ensaioId !== id);
+      salvarDB();
+    }
+
+    function excluirCoreografia(id) {
+      if (!confirm('Deseja excluir esta coreografia?')) return;
+      db.coreografias = db.coreografias.filter(c => c.id !== id);
+      salvarDB();
+    }
+
+    function renderEnsaios() {
+      const tbody = document.getElementById('tabelaEnsaios');
+      tbody.innerHTML = '';
+
+      db.ensaios.slice().reverse().forEach(ensaio => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="pill">${ensaio.nome}</span></td>
+          <td>${ensaio.idade}</td>
+          <td>${formatarDataISO(ensaio.dataEnsaio)}</td>
+          <td>${nomeMes(ensaio.dataEnsaio)}</td>
+          <td>${ensaio.horarioEnsaio}</td>
+          <td>${ensaio.horaChegada}</td>
+          <td>${ensaio.horaSaida}</td>
+          <td><strong>${formatarMinutos(ensaio.totalMin)}</strong></td>
+          <td>${ensaio.observacoes || '-'}</td>
+          <td><button class="danger" onclick="excluirEnsaio('${ensaio.id}')">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCoreografias() {
+      const tbody = document.getElementById('tabelaCoreografias');
+      tbody.innerHTML = '';
+
+      db.coreografias.slice().reverse().forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.participante}</td>
+          <td>${formatarDataISO(item.dataEnsaio)}</td>
+          <td><span class="pill">${item.nomeCoreografia}</span></td>
+          <td>${item.inicio}</td>
+          <td>${item.fim}</td>
+          <td><strong>${formatarMinutos(item.totalMin)}</strong></td>
+          <td>${item.descricao || '-'}</td>
+          <td><button class="danger" onclick="excluirCoreografia('${item.id}')">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSelectEnsaios() {
+      const select = document.getElementById('ensaioSelect');
+      select.innerHTML = '<option value="">Selecione...</option>';
+      db.ensaios.slice().reverse().forEach(ensaio => {
+        const opt = document.createElement('option');
+        opt.value = ensaio.id;
+        opt.textContent = `${ensaio.nome} • ${formatarDataISO(ensaio.dataEnsaio)} • Ensaio ${ensaio.horarioEnsaio}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderStats() {
+      const totalEnsaios = db.ensaios.length;
+      const totalMinEnsaios = db.ensaios.reduce((s, e) => s + (e.totalMin || 0), 0);
+      const totalCoreografias = db.coreografias.length;
+      const media = totalEnsaios ? Math.round(totalMinEnsaios / totalEnsaios) : 0;
+
+      document.getElementById('totalEnsaios').textContent = totalEnsaios;
+      document.getElementById('totalHoras').textContent = formatarMinutos(totalMinEnsaios);
+      document.getElementById('totalCoreografias').textContent = totalCoreografias;
+      document.getElementById('mediaEnsaio').textContent = formatarMinutos(media);
+    }
+
+    function renderAll() {
+      renderEnsaios();
+      renderCoreografias();
+      renderSelectEnsaios();
+      renderStats();
+    }
+
+    atualizarRelogio();
+    setInterval(atualizarRelogio, 1000);
+    preencherDataHoje();
+    carregarDB();
+  </script>
+</body>
+</html>
