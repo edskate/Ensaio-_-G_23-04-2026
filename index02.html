@@ -9,64 +9,62 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #ffffff;
-      color: #1a1a1a;
+      background: linear-gradient(180deg, #000 0%, #111 100%);
+      color: #fe0000;
     }
     .wrap {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      color: #1a1a1a;
     }
     h1, h2, h3 {
-      color: #111111;
+      color: #e70000;
       margin-top: 0;
     }
     .subtitle {
-      color: #333333;
+      color: #d60000;
       margin-bottom: 20px;
     }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
-      color: #1a1a1a;
+      color: #ee0707;
     }
     .card {
       background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(61, 165, 255, 0.35);
       border-radius: 16px;
       padding: 18px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
-      color: #1a1a1a;
+      box-shadow: 0 0 18px rgba(255, 61, 61, 0.08);
     }
     label {
       display: block;
       font-size: 14px;
       margin-bottom: 6px;
-      color: #333333;
+      color: #e40000;
       font-weight: bold;
     }
     input, select, button, textarea {
       width: 100%;
       padding: 12px;
       border-radius: 10px;
-      border: 1px solid #b8b8b8;
-      background: #ffffff;
-      color: #1a1a1a;
+      border: 1px solid #444;
+      background: #0d0d0d;
+      color: #ff0000;
       font-size: 15px;
       margin-bottom: 12px;
     }
     textarea { min-height: 90px; resize: vertical; }
     button {
-      background: linear-gradient(180deg, #4a90e2 0%, #1c5db0 100%);
-      color: #ffffff;
+      background: linear-gradient(180deg, #ffffff 0%, #9b111e 100%);
+      color: #e30909;
       border: none;
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.15s ease, opacity 0.15s ease;
     }
-    button:hover { transform: translateY(-1px); box-shadow: 0 0 10px rgba(74,144,226,0.6); }
+    button:hover { transform: translateY(-1px); box-shadow: 0 0 10px rgba(155,17,30,0.6); }
     button.secondary {
       background: #222;
       color: #fcfeff;
@@ -81,7 +79,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 16px;
       margin-bottom: 16px;
-      color: #ff0202;
     }
     .clock {
       font-size: 22px;
@@ -98,55 +95,55 @@
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 12px;
       margin: 18px 0;
-      color: #111111;
+      color: #000;
     }
     .stat {
-      background: #f4f6f8;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #94e147;
+      border: 1px solid rgba(61,165,255,0.3);
       border-radius: 12px;
       padding: 14px;
       text-align: center;
     }
     .stat .big {
       font-size: 24px;
-      color: #111111;
+      color: #ff0000;
       font-weight: bold;
     }
     table {
       width: 100%;
-      color: #111111;
+      color: white;
       border-collapse: collapse;
       margin-top: 12px;
       font-size: 14px;
     }
     th, td {
-      border: 1px solid #d4d4d4;
+      border: 1px solid #dc1010;
       padding: 10px;
       text-align: left;
       vertical-align: top;
-      color: #111111;
+      color: #000;
     }
     th {
-      background: #f0f0f0;
-      color: #111111;
+      background: #1d1d1d;
+      color: #000000;
     }
-    tr:nth-child(even) { background: rgba(0, 0, 0, 0.03); }
+    tr:nth-child(even) { background: rgba(248, 240, 240, 0.03); }
     .pill {
       display: inline-block;
       padding: 5px 10px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: bold;
-      background: rgba(0, 0, 0, 0.05);
-      color: #111111;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: rgba(245, 245, 245, 0.8);
+      color: #ff0000;
+      border: 1px solid rgba(61,165,255,0.35);
     }
     .inline-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .muted { color: #555555; font-size: 13px; }
+    .muted { color: #d80000; font-size: 13px; }
     .actions {
       display: flex;
       gap: 8px;
@@ -155,10 +152,55 @@
     .actions button { width: auto; margin-bottom: 0; }
     .footer-note {
       text-align: center;
-      color: #555555;
+      color: #ff0202;
       font-size: 13px;
       margin-top: 25px;
     }
+
+    /* ===== MODO PDF BRANCO / DIRETOR ===== */
+    body.modo-branco {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+    body.modo-branco * {
+      color: #000000 !important;
+      background: #ffffff !important;
+      border-color: #000000 !important;
+      box-shadow: none !important;
+    }
+    body.modo-branco button {
+      background: #000000 !important;
+      color: #ffffff !important;
+      border: 1px solid #000000 !important;
+    }
+    body.modo-branco .pill {
+      border: 1px solid #000000 !important;
+      color: #000000 !important;
+      background: #ffffff !important;
+    }
+    .relatorio-diretor {
+      display: none;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #000000;
+      padding: 22px;
+      margin-top: 18px;
+      border-radius: 0;
+    }
+    body.modo-branco .relatorio-diretor { display: block; }
+    .assinaturas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 45px;
+    }
+    .linha-assinatura {
+      border-top: 1px solid #000000;
+      text-align: center;
+      padding-top: 8px;
+      font-size: 13px;
+    }
+
     @media print {
       body { background: #ffffff; color: #dbcece; }
       .card, .stat { background: #fff; color: #000; box-shadow: none; }
@@ -228,7 +270,8 @@
         <div class="actions">
           <button onclick="adicionarEnsaio()">Salvar Ensaio</button>
           <button class="secondary" onclick="limparFormulario()">Limpar</button>
-          <button class="secondary" onclick="window.print()">Exportar PDF</button>
+          <button class="secondary" onclick="window.print()">PDF Normal</button>
+          <button class="secondary" onclick="gerarPDFBranco()">PDF Branco Profissional</button>
         </div>
       </div>
 
@@ -300,6 +343,25 @@
         </thead>
         <tbody id="tabelaCoreografias"></tbody>
       </table>
+    </div>
+
+
+    <div class="relatorio-diretor" id="relatorioDiretor">
+      <h2>RELATÓRIO OFICIAL DO DIRETOR</h2>
+      <p><strong>Responsável artístico:</strong> EdyMichaelCover</p>
+      <p><strong>Finalidade:</strong> controle profissional de ensaio, presença, tempo de trabalho e evolução das coreografias.</p>
+      <p><strong>Observação:</strong> este relatório deve ser usado para acompanhamento interno, organização da equipe e registro de disciplina artística.</p>
+
+      <h3>Resumo automático</h3>
+      <p>Total de ensaios: <strong id="pdfTotalEnsaios">0</strong></p>
+      <p>Total de horas registradas: <strong id="pdfTotalHoras">00:00</strong></p>
+      <p>Total de coreografias registradas: <strong id="pdfTotalCoreografias">0</strong></p>
+      <p>Média por ensaio: <strong id="pdfMediaEnsaio">00:00</strong></p>
+
+      <div class="assinaturas">
+        <div class="linha-assinatura">Assinatura do Diretor / Artista</div>
+        <div class="linha-assinatura">Assinatura do Participante</div>
+      </div>
     </div>
 
     <div class="footer-note">Programa novo de ensaio • estilo funcional • pronto para usar no celular ou computador</div>
@@ -542,6 +604,13 @@
       document.getElementById('totalHoras').textContent = formatarMinutos(totalMinEnsaios);
       document.getElementById('totalCoreografias').textContent = totalCoreografias;
       document.getElementById('mediaEnsaio').textContent = formatarMinutos(media);
+
+      if (document.getElementById('pdfTotalEnsaios')) {
+        document.getElementById('pdfTotalEnsaios').textContent = totalEnsaios;
+        document.getElementById('pdfTotalHoras').textContent = formatarMinutos(totalMinEnsaios);
+        document.getElementById('pdfTotalCoreografias').textContent = totalCoreografias;
+        document.getElementById('pdfMediaEnsaio').textContent = formatarMinutos(media);
+      }
     }
 
     function renderAll() {
@@ -549,6 +618,18 @@
       renderCoreografias();
       renderSelectEnsaios();
       renderStats();
+    }
+
+
+    function gerarPDFBranco() {
+      document.body.classList.add('modo-branco');
+      renderAll();
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+          document.body.classList.remove('modo-branco');
+        }, 600);
+      }, 250);
     }
 
     atualizarRelogio();
