@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Coreografia V2 - EdyMichaelCover</title>
+
+<style>
+:root{
+  --bg:#f4f4f4;
+  --card:#ffffff;
+  --gold:#b8860b;
+  --gold2:#d4af37;
+  --red:#b00020;
+  --green:#006400;
+  --text:#111111;
+  --border:#666666;
+}
+
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(180deg,#f8f8f8,#e4e4e4);
+  color:var(--text);
+  padding:15px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+header{
+  text-align:center;
+  border:2px solid var(--gold);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:15px;
+  background:#fff;
+}
+
+h1,h2,h3{color:var(--gold);}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--gold);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:15px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin:7px 0;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#ffffff;
+  color:var(--text);
+}
+
+button{
+  width:100%;
+  padding:13px;
+  margin:6px 0;
+  border:none;
+  border-radius:10px;
+  background:var(--gold);
+  color:#111111;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.timer{
+  font-size:38px;
+  text-align:center;
+  color:var(--gold2);
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+th,td{
+  border:1px solid var(--border);
+  padding:8px;
+  text-align:center;
+}
+
+.green{color:var(--green);font-weight:bold;}
+.red{color:var(--red);font-weight:bold;}
+.gold{color:var(--gold);font-weight:bold;}
+
+@media print{
+  button,input,select{display:none;}
+  body{background:#fff;color:#000;}
+  .card,header{border:1px solid #000;background:#fff;color:#000;}
+  h1,h2,h3{color:#000;}
+  th,td{border:1px solid #000;color:#000;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎬 Sistema de Criação de Coreografia</h1>
+  <p>EdyMichaelCover — Controle de tempo, ranking e disciplina</p>
+</header>
+
+<div class="card">
+  <h2>➕ Nova Sessão de Criação</h2>
+
+  <input id="coreografia" placeholder="Nome da coreografia">
+  
+  <select id="dancarino">
+    <option>Renan</option>
+    <option>Abizael</option>
+    <option>Patrick</option>
+    <option>Jhonny</option>
+    <option>Participação Especial</option>
+  </select>
+
+  <select id="etapa">
+    <option>Criação Base</option>
+    <option>Desenvolvimento</option>
+    <option>Clean / Limpeza</option>
+    <option>Finalização de Palco</option>
+  </select>
+
+  <button onclick="registrarEntrada()">✅ Registrar Entrada</button>
+  <p id="entrada"></p>
+</div>
+
+<div class="card">
+  <h2>⏱ Tempo Real da Coreografia</h2>
+  <div class="timer" id="timer">00:00:00</div>
+
+  <button onclick="iniciar()">▶ Iniciar Criação</button>
+  <button onclick="pausar()">⏸ Pausar</button>
+  <button onclick="finalizar()">✔ Finalizar Sessão</button>
+</div>
+
+<div class="card">
+  <h2>📊 Histórico de Criação</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Coreografia</th>
+        <th>Dançarino</th>
+        <th>Etapa</th>
+        <th>Tempo</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="historico"></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>🏆 Ranking de Produção</h2>
+  <div id="ranking"></div>
+</div>
+
+<div class="card">
+  <h2>⚠️ Controle Disciplinar</h2>
+  <div id="disciplina"></div>
+</div>
+
+<div class="card">
+  <button onclick="gerarPDF()">📄 Gerar PDF</button>
+  <button onclick="limparTudo()">🗑 Limpar Histórico</button>
+</div>
+
+<script>
+let segundos = 0;
+let intervalo = null;
+let entradaLiberada = false;
+let atrasos = JSON.parse(localStorage.getItem("atrasos")) || {};
+let ranking = JSON.parse(localStorage.getItem("ranking")) || {};
+let historico = JSON.parse(localStorage.getItem("historicoCoreografia")) || [];
+
+function formatarTempo(seg){
+  let h = Math.floor(seg / 3600);
+  let m = Math.floor((seg % 3600) / 60);
+  let s = seg % 60;
+  return String(h).padStart(2,"0") + ":" +
+         String(m).padStart(2,"0") + ":" +
+         String(s).padStart(2,"0");
+}
+
+function atualizarTimer(){
+  document.getElementById("timer").innerText = formatarTempo(segundos);
+}
+
+function registrarEntrada(){
+  const nome = document.getElementById("dancarino").value;
+  const agora = new Date();
+  const hora = agora.getHours();
+  const minuto = agora.getMinutes();
+
+  if(hora > 22 || (hora === 22 && minuto > 30)){
+    entradaLiberada = false;
+    atrasos[nome] = (atrasos[nome] || 0) + 1;
+    localStorage.setItem("atrasos", JSON.stringify(atrasos));
+
+    document.getElementById("entrada").innerHTML =
+      "❌ Entrada bloqueada: chegou após 22:30.";
+    document.getElementById("entrada").className = "red";
+  }else{
+    entradaLiberada = true;
+    document.getElementById("entrada").innerHTML =
+      "✅ Entrada liberada dentro do horário.";
+    document.getElementById("entrada").className = "green";
+  }
+
+  mostrarDisciplina();
+}
+
+function iniciar(){
+  if(!entradaLiberada){
+    alert("Entrada não liberada. Registre a entrada antes de iniciar.");
+    return;
+  }
+
+  if(intervalo) return;
+
+  intervalo = setInterval(function(){
+    segundos++;
+    atualizarTimer();
+  },1000);
+}
+
+function pausar(){
+  clearInterval(intervalo);
+  intervalo = null;
+}
+
+function finalizar(){
+  const coreografia = document.getElementById("coreografia").value || "Sem nome";
+  const dancarino = document.getElementById("dancarino").value;
+  const etapa = document.getElementById("etapa").value;
+  const data = new Date().toLocaleDateString("pt-BR");
+
+  if(segundos === 0){
+    alert("Nenhum tempo registrado.");
+    return;
+  }
+
+  let status = "Em criação";
+  if(segundos >= 1800) status = "Boa produção";
+  if(segundos >= 3600) status = "Produção forte";
+
+  historico.push({
+    data,
+    coreografia,
+    dancarino,
+    etapa,
+    tempo: segundos,
+    status
+  });
+
+  ranking[dancarino] = (ranking[dancarino] || 0) + segundos;
+
+  localStorage.setItem("historicoCoreografia", JSON.stringify(historico));
+  localStorage.setItem("ranking", JSON.stringify(ranking));
+
+  segundos = 0;
+  pausar();
+  atualizarTimer();
+  entradaLiberada = false;
+
+  mostrarHistorico();
+  mostrarRanking();
+  mostrarDisciplina();
+}
+
+function mostrarHistorico(){
+  const tbody = document.getElementById("historico");
+  tbody.innerHTML = "";
+
+  historico.forEach(item=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${item.data}</td>
+        <td>${item.coreografia}</td>
+        <td>${item.dancarino}</td>
+        <td>${item.etapa}</td>
+        <td>${formatarTempo(item.tempo)}</td>
+        <td class="gold">${item.status}</td>
+      </tr>
+    `;
+  });
+}
+
+function mostrarRanking(){
+  const div = document.getElementById("ranking");
+  div.innerHTML = "";
+
+  const lista = Object.entries(ranking).sort((a,b)=>b[1]-a[1]);
+
+  lista.forEach((item,index)=>{
+    div.innerHTML += `
+      <p>
+        ${index+1}º — <b>${item[0]}</b>:
+        <span class="gold">${formatarTempo(item[1])}</span>
+      </p>
+    `;
+  });
+}
+
+function mostrarDisciplina(){
+  const div = document.getElementById("disciplina");
+  div.innerHTML = "";
+
+  Object.entries(atrasos).forEach(item=>{
+    const nome = item[0];
+    const total = item[1];
+
+    let classe = total >= 3 ? "red" : "gold";
+    let aviso = total >= 3 ? "⚠️ ALERTA DISCIPLINAR" : "Observação";
+
+    div.innerHTML += `
+      <p class="${classe}">
+        ${nome}: ${total} atraso(s) — ${aviso}
+      </p>
+    `;
+  });
+}
+
+function gerarPDF(){
+  window.print();
+}
+
+function limparTudo(){
+  if(confirm("Deseja limpar todo o histórico?")){
+    localStorage.removeItem("historicoCoreografia");
+    localStorage.removeItem("ranking");
+    localStorage.removeItem("atrasos");
+    historico = [];
+    ranking = {};
+    atrasos = {};
+    mostrarHistorico();
+    mostrarRanking();
+    mostrarDisciplina();
+  }
+}
+
+mostrarHistorico();
+mostrarRanking();
+mostrarDisciplina();
+atualizarTimer();
+</script>
+
+</body>
+</html>
